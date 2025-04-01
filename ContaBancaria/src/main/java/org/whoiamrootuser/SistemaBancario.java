@@ -113,7 +113,9 @@ public class SistemaBancario {
                         } else if (conta instanceof ContaCoPremium) {
                             ((ContaCoPremium) conta).exibeBeneficioPremium();
                         } else if (conta instanceof ContaCoEmpresarial) {
-                            boolean emprestou = ((ContaCoEmpresarial) conta).solicitaEmprestimo(3000);
+                            System.out.print("Digite o valor do emprestimo: ");
+                            double valorEmprestimo = scanner.nextDouble();
+                            boolean emprestou = ((ContaCoEmpresarial) conta).solicitaEmprestimo(valorEmprestimo);
                             if (emprestou) {
                                 System.out.println("Emprestimo realizado com sucesso.");
                             } else {

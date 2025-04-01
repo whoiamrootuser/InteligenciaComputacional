@@ -9,9 +9,8 @@ public class ContaCoPremium extends ContaCo {
 
     @Override
     public boolean sacar(double valor){
-        super.sacar(valor);
         saldo += valor * (cashBackPercentual/100);
-        return true;
+        return super.sacar(valor);
     }
 
     public String exibeBeneficioPremium() {
