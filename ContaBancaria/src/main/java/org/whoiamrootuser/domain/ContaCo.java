@@ -13,12 +13,8 @@ public class ContaCo extends ContaBancaria {
     @Override
     public boolean sacar(double valor) {
         double saldoTotal = saldo + limiteChequeEspecial;
-        if (saldoTotal <= valor) {
+        if (saldoTotal >= valor) {
             saldo -= valor;
-            if(saldo < 0) {
-                limiteChequeEspecial -= saldo;
-                saldo = 0  ;
-                }
             return true;
             }
         return false;
