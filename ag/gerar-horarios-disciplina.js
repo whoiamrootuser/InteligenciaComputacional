@@ -5,14 +5,14 @@ document.addEventListener("DOMContentLoaded", function () {
 const dados = [
     { professor: "001", periodos: [{ id: 1, disciplinas: ["FBD"] }, { id: 2, disciplinas: ["BDA"] }] },
     { professor: "002", periodos: [{ id: 0, disciplinas: ["FSI"] }, { id: 1, disciplinas: ["AP"] }, { id: 3, disciplinas: ["BDNSQL"] }] },
-    { professor: "003", periodos: [{ id: 2, disciplinas: ["POO2", "PBMO"] }] },
-    { professor: "004", periodos: [{ id: 1, disciplinas: ["LP"] }, { id: 3, disciplinas: ["JB", "IHC"] }] },
+    { professor: "003", periodos: [{ id: 2, disciplinas: ["POO2"] }, { id: 3, disciplinas: ["IHC"] }] },
+    { professor: "004", periodos: [{ id: 1, disciplinas: ["LP"] }, { id: 3, disciplinas: ["JB"] }] },
     { professor: "005", periodos: [{ id: 1, disciplinas: ["POO1"] }, { id: 3, disciplinas: ["BD"] }] },
-    { professor: "006", periodos: [{ id: 0, disciplinas: ["PWE"] }, { id: 1, disciplinas: ["PSWMS"] }] },
+    { professor: "006", periodos: [{ id: 0, disciplinas: ["PWE"] }, { id: 2, disciplinas: [ "PBMO"] }, { id: 1, disciplinas: ["PSWMS"] }, { id: 4, disciplinas: ["LIB"] }] },
     { professor: "007", periodos: [{ id: 2, disciplinas: ["PFWJS"] }, { id: 3, disciplinas: ["PBMSNSQL"] }] },
     { professor: "008", periodos: [{ id: 1, disciplinas: ["AP"] }, { id: 3, disciplinas: ["PADM"] }, { id: 4, disciplinas: ["SSI"] }] },
     { professor: "009", periodos: [{ id: 0, disciplinas: ["REQ"] }, { id: 3, disciplinas: ["SI"] }, { id: 4, disciplinas: ["PRAM"] }] },
-    { professor: "010", periodos: [{ id: 0, disciplinas: ["EMP"] }, { id: 2, disciplinas: ["TA"] }, { id: 4, disciplinas: ["LIB", "TE1"] }] },
+    { professor: "010", periodos: [{ id: 0, disciplinas: ["EMP"] }, { id: 2, disciplinas: ["TA"] }, { id: 4, disciplinas: ["TE1"] }] },
 ];
 
 function popularHorarios(geracoes) {
