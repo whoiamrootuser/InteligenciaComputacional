@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         let alocacoesFeitas = 0;
 
-        while (alocacoesFeitas < 5 && horariosDisponiveis.length > 0) {
+        while (alocacoesFeitas < 4 && horariosDisponiveis.length > 0) {
           let index = Math.floor(Math.random() * horariosDisponiveis.length);
           let horarioSorteado = horariosDisponiveis.splice(index, 1)[0];
 
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!horario) {
           let disciplinasFaltantes = Array.from(
             cargaDisciplinas.entries()
-          ).filter(([_, info]) => info.count < 5);
+          ).filter(([_, info]) => info.count < 4);
 
           if (disciplinasFaltantes.length > 0) {
             let [disciplina, info] =
