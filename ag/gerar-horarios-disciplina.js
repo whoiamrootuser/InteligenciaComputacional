@@ -171,16 +171,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function orderedByFitness(aval) {
+    return aval.sort((a, b) => a.fitness - b.fitness);
+  }
+
   // Chama a função para popular os horários
   const geracoes = 50; // Número de gerações desejadas
   const scheduleDataSet = popularHorarios(geracoes);
   const avaliation = popAvaliation(scheduleDataSet);
+  const orderedAvaliation = orderedByFitness(avaliation);
+
 
   const table = document.createElement("table");
   table.style.border = "1px solid black";
   table.style.borderCollapse = "collapse";
 
-  avaliation.forEach(({fitness, schedule}) => {
+  orderedAvaliation.forEach(({fitness, schedule}) => {
     const row = document.createElement("tr");
     row.style.border = "1px solid black"; // Add border to rows
     const cell = document.createElement("td");
