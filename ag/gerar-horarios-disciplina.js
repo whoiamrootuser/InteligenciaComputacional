@@ -175,18 +175,23 @@ document.addEventListener("DOMContentLoaded", function () {
     return aval.sort((a, b) => a.fitness - b.fitness);
   }
 
+  function selectBestSchedules(aval, n) {
+    return aval.slice(0, n);
+  }
+
   // Chama a função para popular os horários
   const geracoes = 50; // Número de gerações desejadas
   const scheduleDataSet = popularHorarios(geracoes);
   const avaliation = popAvaliation(scheduleDataSet);
   const orderedAvaliation = orderedByFitness(avaliation);
+  const bestSchedules = selectBestSchedules(orderedAvaliation, 10);
 
 
   const table = document.createElement("table");
   table.style.border = "1px solid black";
   table.style.borderCollapse = "collapse";
 
-  orderedAvaliation.forEach(({fitness, schedule}) => {
+  bestSchedules.forEach(({fitness, schedule}) => {
     const row = document.createElement("tr");
     row.style.border = "1px solid black"; // Add border to rows
     const cell = document.createElement("td");
