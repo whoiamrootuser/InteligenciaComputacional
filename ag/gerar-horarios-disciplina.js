@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Estrutura de professores e disciplinas por período
+// Estrutura de professores e disciplinas por período
   const dados = [
     {
       professor: "001",
@@ -176,7 +176,14 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function selectBestSchedules(aval, n) {
-    return aval.slice(0, n);
+    // Seleciona aleatoriamente n horários com melhor fitness e outro qualquer
+    const selected= [];
+     aval.slice(0, n).forEach((item) => {
+      selected.push(item);
+      const randomIndex = Math.floor(Math.random() * aval.length);
+      selected.push(aval[randomIndex]);
+    });
+    return selected;
   }
 
   // Chama a função para popular os horários
@@ -184,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const scheduleDataSet = popularHorarios(geracoes);
   const avaliation = popAvaliation(scheduleDataSet);
   const orderedAvaliation = orderedByFitness(avaliation);
-  const bestSchedules = selectBestSchedules(orderedAvaliation, 10);
+  const bestSchedules = selectBestSchedules(orderedAvaliation, 25);
 
 
   const table = document.createElement("table");
