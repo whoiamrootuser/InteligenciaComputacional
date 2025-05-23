@@ -3,20 +3,24 @@ export class Perceptron {
   bias: number;
   learningRate: number;
   threshold: number;
+  isTraining: boolean;
 
   constructor(
     inputSize: number,
     learningRate: number = 0.01,
     threshold: number = 1,
   ) {
+    this.isTraining = false;
     this.threshold = threshold;
-    this.weights = Array(inputSize).fill(0);
+    this.weights = Array(inputSize + 1).fill(0);
     this.bias = 0;
     this.learningRate = learningRate;
   }
 
-  activationFunction(x: number): number {
-    return x >= this.threshold ? 1 : -1;
+  activationFunction(yent: number): number {
+    if (this.isTraining)
+      return yent > this.threshold ? 1 : yent < -this.threshold ? -1 : 0;
+    return yent > this.threshold ? 1 : -1;
   }
 
   predict(inputs: number[]): number {
@@ -28,8 +32,14 @@ export class Perceptron {
   }
 
   train(trainingData: Array<{ inputs: number[]; label: number }>): void {
+    this.isTraining = true;
     let epoch = 0;
     let hasError: boolean;
+    trainingData = trainingData.map((data) => ({
+      inputs: [1, ...data.inputs],
+      label: data.label,
+    }));
+
     do {
       hasError = false;
       for (const { inputs, label } of trainingData) {
@@ -49,5 +59,9 @@ export class Perceptron {
       }
       epoch++;
     } while (hasError);
+    this.isTraining = false;
+    console.log(`Training completed in ${epoch} epochs.`);
+    console.log(`Final Weights: ${this.weights}`);
+    console.log(`Final Bias: ${this.bias}`);
   }
 }
