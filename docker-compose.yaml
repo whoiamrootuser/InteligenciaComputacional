@@ -5,7 +5,7 @@ services:
     image: node:18-alpine
     working_dir: /app
     volumes:
-      - .:/app
+      - ./neuronio/perceptron:/app
     command: sh -c "npm install && npm run build"
     depends_on:
       - nginx
@@ -14,7 +14,7 @@ services:
     image: nginx:alpine
    
     volumes:
-    - ./dist:/usr/share/nginx/html
+    - ./neuronio/perceptron/dist:/usr/share/nginx/html
     networks:
       - frontend
 
