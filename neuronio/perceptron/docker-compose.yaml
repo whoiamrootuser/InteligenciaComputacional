@@ -5,7 +5,7 @@ services:
     image: node:18-alpine
     working_dir: /app
     volumes:
-      - .:/app
+      - ./neuronio/perceptron:/app
       - /app/node_modules
     command: sh -c "npm install && npm run build"
     depends_on:
@@ -13,13 +13,9 @@ services:
 
   nginx:
     image: nginx:alpine
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.pfwjs.rule=Host(`perceptron.${HOST}`)
-      - traefik.http.routers.pfwjs.entrypoints=websecure
-      - traefik.http.routers.pfwjs.tls.certresolver=cloudflare
+   
     volumes:
-    - ./dist:/usr/share/nginx/html
+    - ./neuronio/perceptron/dist:/usr/share/nginx/html
     networks:
       - frontend
 
