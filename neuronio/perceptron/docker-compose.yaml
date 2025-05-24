@@ -18,7 +18,7 @@ services:
       - traefik.http.routers.perceptron.entrypoints=websecure
       - traefik.http.routers.perceptron.tls.certresolver=cloudflare
     volumes:
-    - ./dist:/usr/share/nginx/html/dist:ro
+    - ./dist:/usr/share/nginx/html:ro
     networks:
       - frontend
 
