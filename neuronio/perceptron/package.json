@@ -1,24 +1,21 @@
 {
-  "name": "perceptron",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "perceptron-digit-recognizer",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write .",
-    "build": "tsc",
-    "start": "ts-node src/index.ts",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
   "devDependencies": {
-    "@types/node": "^20.17.50",
-    "prettier": "^3.5.3",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3",
-    "undici-types": "^7.10.0"
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.5",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0"
   }
 }
