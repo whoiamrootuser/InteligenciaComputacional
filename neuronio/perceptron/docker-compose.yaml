@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  vite-app:
+  perceptron-app-build:
     image: node:18-alpine
     working_dir: /app
     volumes:
