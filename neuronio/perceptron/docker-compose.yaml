@@ -12,7 +12,11 @@ services:
 
   nginx:
     image: nginx:alpine
-   
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.pfwjs.rule=Host(`perceptron.${HOST}`)
+      - traefik.http.routers.pfwjs.entrypoints=websecure
+      - traefik.http.routers.pfwjs.tls.certresolver=cloudflare
     volumes:
     - ./dist:/usr/share/nginx/html
     networks:
