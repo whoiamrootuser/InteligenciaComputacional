@@ -1,8 +1,7 @@
-
-export interface DigitTrainingInstance {
-  digit: number;
+export interface DataTrainingInstance {
+  label: number;
   input: number[];
-  target: number[]; 
+  target: number[];
 }
 
 export type InputVector = number[];

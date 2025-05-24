@@ -4,19 +4,17 @@ export class Perceptron {
   weights: number[];
   learningRate: number;
   threshold: number;
-  isTraining: boolean = false; 
-  weightsHistory: number[][] = [];
+  isTraining: boolean = false;
 
   constructor(
     inputSize: number,
     learningRate: number = 1,
-    initialBias?: number, 
-    threshold: number = 0.0
+    initialBias?: number,
+    threshold: number = 0.0,
   ) {
     this.learningRate = learningRate;
     this.threshold = threshold;
     this.weights = new Array(inputSize + 1).fill(0);
-
 
     if (initialBias !== undefined) {
       this.weights[0] = initialBias;
@@ -39,8 +37,17 @@ export class Perceptron {
     const inputsWithBias = [1, ...inputs];
 
     if (inputsWithBias.length !== this.weights.length) {
-      console.error("Input vector:", inputs, "Inputs with bias:", inputsWithBias, "Weights:", this.weights);
-      throw new Error(`Input vector size mismatch. Expected ${this.weights.length -1} features, got ${inputs.length}.`);
+      console.error(
+        'Input vector:',
+        inputs,
+        'Inputs with bias:',
+        inputsWithBias,
+        'Weights:',
+        this.weights,
+      );
+      throw new Error(
+        `Input vector size mismatch. Expected ${this.weights.length - 1} features, got ${inputs.length}.`,
+      );
     }
 
     let sum = 0;
@@ -66,6 +73,5 @@ export class Perceptron {
       }
     }
     this.isTraining = false;
-    this.weightsHistory.push([...this.weights]);
   }
 }
