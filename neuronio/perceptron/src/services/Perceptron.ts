@@ -46,7 +46,9 @@ export class Perceptron {
         this.weights,
       );
       throw new Error(
-        `Input vector size mismatch. Expected ${this.weights.length - 1} features, got ${inputs.length}.`,
+        `Input vector size mismatch. Expected ${
+          this.weights.length - 1
+        } features, got ${inputs.length}.`,
       );
     }
 
@@ -58,7 +60,7 @@ export class Perceptron {
   }
 
   train(inputs: InputVector, target: TargetOutput): void {
-    this.isTraining = true; // Set training mode
+    this.isTraining = true;
     const prediction = this.predict(inputs);
     const error = target - prediction;
 
