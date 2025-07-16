@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  build:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm install && npm run build"
+    depends_on:
+      - nginx
+
+  nginx:
+    image: nginx:alpine
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.perceptron.rule=Host(`perceptron.${HOST}`)
+      - traefik.http.routers.perceptron.entrypoints=websecure
+      - traefik.http.routers.perceptron.tls.certresolver=cloudflare
+    volumes:
+    - ./dist:/usr/share/nginx/html:ro
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true

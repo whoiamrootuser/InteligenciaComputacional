@@ -1,0 +1,5 @@
+{
+  "name": "Genetic Scheduler AI",
+  "description": "An interactive web application that demonstrates and utilizes a genetic algorithm to solve a complex scheduling problem for teachers and disciplines. The app visualizes each step of the algorithm, from initial population to the final optimized schedule, with AI-powered explanations for each concept.",
+  "requestFramePermissions": []
+}
