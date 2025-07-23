@@ -131,7 +131,7 @@ const InputStep: React.FC<InputStepProps> = ({ onSubmit }) => {
               ))}
             </div>
             <div className="mt-4 flex gap-2 items-end">
-              <Input label="Nome do professor" id="new-teacher" value={newTeacherName} onChange={e => setNewTeacherName(e.target.value)} placeholder="e.g., Mr. Smith" />
+              <Input label="Nome do professor" id="new-teacher" value={newTeacherName} onChange={e => setNewTeacherName(e.target.value)} placeholder="Professor..." />
               <Button type="button" variant="secondary" onClick={handleAddTeacher}>Add</Button>
             </div>
           </div>
@@ -159,7 +159,7 @@ const InputStep: React.FC<InputStepProps> = ({ onSubmit }) => {
               ))}
             </div>
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-[1fr_auto] md:grid-cols-1 lg:grid-cols-[2fr_1fr_2fr_auto] gap-2 items-end">
-              <Input label="Nova Disciplina" id="new-discipline" value={newDisciplineName} onChange={e => setNewDisciplineName(e.target.value)} placeholder="e.g., Algebra II"/>
+              <Input label="Nova Disciplina" id="new-discipline" value={newDisciplineName} onChange={e => setNewDisciplineName(e.target.value)} placeholder="Disciplina..."/>
               <Input label="Horas/Semana" id="new-hours" type="number" min="1" max="10" value={newDisciplineHours} onChange={e => setNewDisciplineHours(parseInt(e.target.value, 10))} />
               <div>
                 <label htmlFor="new-teacher-select" className="block text-sm font-medium text-slate-700 mb-1">Professor</label>
