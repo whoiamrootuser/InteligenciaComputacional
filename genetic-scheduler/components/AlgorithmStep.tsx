@@ -149,14 +149,15 @@ const AlgorithmStep: React.FC<AlgorithmStepProps> = ({
       const newPopulation: Chromosome[] = [];
 
       // Elitism: Keep the best individual from the current generation (already at index 0 after ordering)
-      const bestOfGeneration = orderedPopulation[0];
+      const bestOfGeneration = evaluatedPopulation.sort((a, b) => b.fitness - a.fitness)[0];
+      console.log(`Best of Generation: ${bestOfGeneration.fitness.toFixed(4)}`);
       newPopulation.push(bestOfGeneration);
 
       while (newPopulation.length < POPULATION_SIZE) {
         // Step 3: Selection (now using ordered population)
         setHighlightedStep("selection");
-        const parent1 = selection(orderedPopulation);
-        const parent2 = selection(orderedPopulation);
+        const parent1 = selection(evaluatedPopulation);
+        const parent2 = selection(evaluatedPopulation);
 
         // Step 4: Crossover
         setHighlightedStep("crossover");
