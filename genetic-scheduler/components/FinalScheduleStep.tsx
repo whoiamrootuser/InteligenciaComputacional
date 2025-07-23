@@ -1,7 +1,6 @@
 import React from 'react';
 import { AppData, Chromosome } from '../types';
 import Card from './ui/Card';
-import ScheduleView from './ScheduleView';
 import Button from './ui/Button';
 import { ScheduleByPeriod } from './ScheduleByPeriod';
 
@@ -12,6 +11,9 @@ interface FinalScheduleStepProps {
 }
 
 const FinalScheduleStep: React.FC<FinalScheduleStepProps> = ({ schedule, appData, onReset }) => {
+
+ 
+
   return (
     <Card className="max-w-7xl mx-auto">
       <div className="text-center">

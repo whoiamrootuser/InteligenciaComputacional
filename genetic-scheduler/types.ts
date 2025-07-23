@@ -15,12 +15,12 @@ export interface Gene {
   period: number; // 0-4 for 5 periods
   disciplineId: number;
   teacherId: number;
-  day: number; // 0 = Monday, 1 = Tuesday, ...
-  hour: number; // 9, 10, 11, ...
+  day?: number; // 0 = Monday, 1 = Tuesday, ...
+  hour?: number; // 9, 10, 11, ...
 }
 
 export interface Chromosome {
-  genes: Gene[];
+  genes: string[];
   fitness: number;
 }
 

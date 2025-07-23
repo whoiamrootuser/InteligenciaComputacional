@@ -1,9 +1,20 @@
 
 export class AgService {
-    private schedule: ScheduleSlot[];
+    private pop: ScheduleSlot[];
+    private tamPop: number = 50;
+    private maxGen: number = 100;
+    private pc: number = 0.7;
+    private pm: number = 0.1;
+
+    private notas: number[] = [];
+    private slots: number = 20;
+
+
+
 
     constructor(private data: DataCourses[], private rate: number = 0.1) {
-        this.schedule = this.initialPopulation();
+         
+        this.pop = this.initialPopulation();
     }
     initialPopulation() {
         // Implementation for initial population
@@ -11,20 +22,16 @@ export class AgService {
         // Slots per day: 0-3
         // Periods: 0-4
         // Example: { period: 0, code: "001-POO1", teacher: "001", course: "POO1" }
-        const schedule: ScheduleSlot[] = [];
-        this.data.forEach(teacher => {
-            teacher.periods.forEach(period => {
-                period.courses.forEach(course => {
-                    schedule.push({
-                        period: period.id,
-                        code: `${teacher.teacher}-${course}`,
-                        teacher: teacher.teacher,
-                        course: course
-                    });
-                });
-            });
-        });
-        return schedule;
+        for (let i = 0; i < this.tamPop; i++) {
+            const individuo: Individual = [];
+            for (const teacherData of this.data) {
+                for(let j = 0; j < 4; j++) { // Assuming 4 periods per day
+                const aula: ScheduleSlot = {
+                    period: j,
+                    code: `${teacherData.teacher}-${teacherData.periods[j].courses[0]}`,    
+                    
+        }
+  
     }
 
     fitnessEvaluation() {
@@ -121,3 +128,5 @@ type ScheduleSlot = {
     teacher: string;
     course: string;
 }
+
+type Individual = ScheduleSlot[];

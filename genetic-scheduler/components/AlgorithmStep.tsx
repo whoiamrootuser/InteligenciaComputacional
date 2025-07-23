@@ -14,8 +14,7 @@ const MAX_GENERATIONS = 50;
 const MUTATION_RATE = 0.005;
 const TOURNAMENT_SIZE = 5;
 const DAYS = 5; // Seg-Sex
-const HOURS_PER_DAY = 4; // 19h - 23h
-const START_HOUR = 19;
+const HOURS_PER_DAY = 4;
 
 // --- GA HELPER FUNCTIONS ---
 
@@ -29,33 +28,45 @@ const createInitialPopulation = (appData: AppData): Chromosome[] => {
         for (let h = 0; h < discipline.hoursPerWeek; h++) {
           genes.push({
             disciplineId: discipline.id,
-            teacherId: discipline.teacherId, // Use the pre-assigned teacher
-            day: Math.floor(Math.random() * DAYS),
-            hour: START_HOUR + Math.floor(Math.random() * HOURS_PER_DAY),
+            teacherId: discipline.teacherId,
+            period: discipline.period
           });
         }
       }
     });
-    population.push({ genes, fitness: 0 });
+    const shuffledGenes = genes
+      .sort(() => Math.random() - 0.5).sort((a, b) => a.period - b.period);
+    const genesIndexed: string[] = shuffledGenes.map(gene =>
+      `${gene.period}-${gene.teacherId}-${gene.disciplineId}`
+    );
+    population.push({ genes: genesIndexed, fitness: 0 });
   }
+
   return population;
 };
 
-const calculateFitness = (chromosome: Chromosome): number => {
+const calculateFitness = (chromosome: string[]): number => {
   let conflicts = 0;
-  const scheduleSlots = new Map<string, number>(); // key: "day-hour-teacher" or "day-hour"
+  const teacherSlots = new Map<string, Set<number>>();
 
-  for (const gene of chromosome.genes) {
-    const teacherSlot = `${gene.day}-${gene.hour}-${gene.teacherId}`;
-    const classSlot = `${gene.day}-${gene.hour}`;
+  for (let i = 0; i < chromosome.length; i++) {
+    const gene = chromosome[i];
+    const [_period, teacherId, _disciplineId] = gene.split('-');
+    const day = Math.floor(i / HOURS_PER_DAY) % DAYS;
+    const hour = i % HOURS_PER_DAY;
 
-    if (scheduleSlots.has(teacherSlot)) conflicts++;
-    else scheduleSlots.set(teacherSlot, 1);
+    const slotKey = `${day}-${hour}`;
+    if (!teacherSlots.has(slotKey)) {
+      teacherSlots.set(slotKey, new Set());
+    }
 
-    if (scheduleSlots.has(classSlot)) conflicts++;
-    else scheduleSlots.set(classSlot, 1);
+    const teachersInSlot = teacherSlots.get(slotKey)!;
+    if (teachersInSlot.has(Number(teacherId))) {
+      conflicts++;
+    } else {
+      teachersInSlot.add(Number(teacherId));
+    }
   }
-  // Fitness is higher for fewer conflicts. Using inverse score.
   return 1 / (1 + conflicts);
 };
 
@@ -72,26 +83,41 @@ const selection = (population: Chromosome[]): Chromosome => {
 };
 
 const crossover = (parent1: Chromosome, parent2: Chromosome): Chromosome => {
-  const crossoverPoint = Math.floor(Math.random() * parent1.genes.length);
-  const childGenes = [
-    ...parent1.genes.slice(0, crossoverPoint),
-    ...parent2.genes.slice(crossoverPoint),
-  ];
+  const childGenes: string[] = [];
+
+  for (let i = 0; i < parent1.genes.length; i += 20) {
+    const sliceStart = i;
+    const sliceEnd = i + 20;
+
+    // Perform crossover for each 20-position segment
+    const parent1Segment = parent1.genes.slice(sliceStart, sliceEnd);
+    const parent2Segment = parent2.genes.slice(sliceStart, sliceEnd);
+
+    const crossoverPoint = Math.floor(Math.random() * (sliceEnd - sliceStart)) + sliceStart;
+
+    const childSegment = [
+      ...parent1Segment.slice(0, crossoverPoint),
+      ...parent2Segment.slice(crossoverPoint),
+    ];
+
+    childGenes.push(...childSegment);
+  }
+
   return { genes: childGenes, fitness: 0 };
 };
 
-const mutate = (chromosome: Chromosome, appData: AppData): Chromosome => {
-  const mutatedGenes = chromosome.genes.map((gene) => {
-    if (Math.random() < MUTATION_RATE) {
-      // Mutate only the time slot, not the teacher or discipline
-      return {
-        ...gene,
-        day: Math.floor(Math.random() * DAYS),
-        hour: START_HOUR + Math.floor(Math.random() * HOURS_PER_DAY),
-      };
+const mutate = (chromosome: Chromosome): Chromosome => {
+  if (Math.random() < MUTATION_RATE) return chromosome;
+  const mutatedGenes = [...chromosome.genes];
+  for (let i = 0; i < mutatedGenes.length; i += 20) {
+    const segment = mutatedGenes.slice(i, i + 20);
+
+    for (let j = segment.length - 1; j > 0; j--) {
+      const randomIndex = Math.floor(Math.random() * (j + 1));
+      [segment[j], segment[randomIndex]] = [segment[randomIndex], segment[j]];
     }
-    return gene;
-  });
+    mutatedGenes.splice(i, segment.length, ...segment);
+  }
   return { genes: mutatedGenes, fitness: 0 };
 };
 
@@ -112,21 +138,14 @@ const AlgorithmStep: React.FC<AlgorithmStepProps> = ({
     );
   }, [population]);
 
+  console.log(`Best Chromosome: ${bestChromosome ? bestChromosome.genes.join(', ') : 'N/A'}`);
+
   const evolve = useCallback(() => {
     setPopulation((currentPopulation) => {
       // Step 1: Fitness Evaluation
-      setHighlightedStep("fitness-evaluation");
-      const evaluatedPopulation = currentPopulation.map((c) => ({
-        ...c,
-        fitness: calculateFitness(c),
-      }));
-
-      // Step 2: Ordering (sort by fitness descending)
-      setHighlightedStep("ordering");
-      const orderedPopulation = [...evaluatedPopulation].sort(
-        (a, b) => b.fitness - a.fitness
-      );
-
+      setHighlightedStep('fitness-evaluation');
+      const evaluatedPopulation = currentPopulation.map(c => ({ ...c, fitness: calculateFitness(c.genes) }));
+      console.log(`Generation ${generation + 1} - Best Fitness: ${Math.max(...evaluatedPopulation.map(c => c.fitness))}`);
       const newPopulation: Chromosome[] = [];
 
       // Elitism: Keep the best individual from the current generation (already at index 0 after ordering)
@@ -143,9 +162,9 @@ const AlgorithmStep: React.FC<AlgorithmStepProps> = ({
         setHighlightedStep("crossover");
         let child = crossover(parent1, parent2);
 
-        // Step 5: Mutation
-        setHighlightedStep("mutation");
-        child = mutate(child, appData);
+        // Step 4: Mutation
+        setHighlightedStep('mutation');
+        child = mutate(child);
 
         newPopulation.push(child);
       }
@@ -185,11 +204,10 @@ const AlgorithmStep: React.FC<AlgorithmStepProps> = ({
 
   const renderGaStep = (key: string, title: string, description: string) => (
     <div
-      className={`p-4 rounded-lg transition-all duration-300 ${
-        highlightedStep === key && isRunning
+      className={`p-4 rounded-lg transition-all duration-300 ${highlightedStep === key && isRunning
           ? "bg-sky-100 ring-2 ring-sky-400"
           : "bg-slate-50"
-      }`}
+        }`}
     >
       <div className="flex items-center justify-between">
         <h4 className="font-bold text-slate-700">{title}</h4>
@@ -215,10 +233,9 @@ const AlgorithmStep: React.FC<AlgorithmStepProps> = ({
             <div className="text-3xl font-bold text-sky-600">{generation}</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-inner border border-slate-200 text-center">
-            <div className="text-sm text-slate-500">Tamanho da populaç</div>
-            <div className="text-3xl font-bold text-sky-600">
-              {POPULATION_SIZE}
-            </div>
+
+            <div className="text-sm text-slate-500">Tamanho da população</div>
+            <div className="text-3xl font-bold text-sky-600">{POPULATION_SIZE}</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-inner border border-slate-200 text-center">
             <div className="text-sm text-slate-500">
